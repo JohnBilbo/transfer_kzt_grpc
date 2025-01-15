@@ -1,0 +1,5 @@
+app:
+  storage_path: ""
+  grpc:
+    port: 50505
+    timeout: 30s
