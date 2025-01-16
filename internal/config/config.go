@@ -16,8 +16,16 @@ func DefaultConfig() Config {
 	return Config{
 		StoragePath: "./data",
 		GRPCConfig: GRPCConfig{
-			Port:    "50050",
+			Port:    "50505",
 			Timeout: 5 * time.Second,
 		},
 	}
+}
+
+func NewConfig() Config {
+	return Config{}
+}
+
+func (c *Config) setConfig() {
+
 }
