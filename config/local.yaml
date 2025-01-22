@@ -1,4 +1,5 @@
 app:
+  config_path: "./../config/local.yaml"
   storage_path: ""
   grpc:
     port: 50505
