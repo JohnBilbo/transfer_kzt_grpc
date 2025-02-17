@@ -1,8 +1,9 @@
 package main
 
 import (
+	grpcS "github.com/JohnBilbo/transfer_kzt_proto/gen/go/transfer_kzt_grpc"
 	"os"
-	"user/internal/config"
+	"transfer_kzt_grpc/internal/config"
 )
 
 func main() {

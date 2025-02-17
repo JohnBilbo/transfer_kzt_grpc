@@ -9,9 +9,8 @@ import (
 )
 
 type Config struct {
-	ConfigPath  string     `yaml:"config_path"`
-	StoragePath string     `yaml:"storage_path"`
-	GRPCConfig  GRPCConfig `yaml:"grpc"`
+	ConfigPath string     `yaml:"config_path"`
+	GRPCConfig GRPCConfig `yaml:"grpc"`
 }
 
 type GRPCConfig struct {
@@ -21,7 +20,6 @@ type GRPCConfig struct {
 
 func DefaultConfig() *Config {
 	return &Config{
-		StoragePath: "./storage",
 		GRPCConfig: GRPCConfig{
 			Port:    "50505",
 			Timeout: 5 * time.Second,
@@ -31,7 +29,6 @@ func DefaultConfig() *Config {
 
 func NewConfig() *Config {
 	return &Config{
-		StoragePath: viper.GetString("app.storage_path"),
 		GRPCConfig: GRPCConfig{
 			Port:    viper.GetString("app.grpc_port"),
 			Timeout: viper.GetDuration("app.grpc_timeout"),
@@ -42,7 +39,7 @@ func NewConfig() *Config {
 // FindProjectRoot - функция перечисляет директории и возвращает путь, найденного корня
 func FindProjectRoot(startDir string) (string, error) {
 	for {
-		if _, err := os.Stat(filepath.Join(startDir, "documents")); !os.IsNotExist(err) {
+		if _, err := os.Stat(filepath.Join(startDir, "transfer_kzt_grpc")); !os.IsNotExist(err) {
 			return startDir, nil
 		}
 		parentDir := filepath.Dir(startDir)
