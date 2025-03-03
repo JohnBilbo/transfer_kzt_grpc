@@ -2,7 +2,17 @@ app:
   config_path: "./../config/local.yaml"
   grpc:
     port: 50505
-    timeout: 30s
+    timeout_second: 30
+  log_level: "debug"
   db:
-    host: ""
-    
+    host: "10.15.151.108"
+    port: "5432"
+    name: "test_dbp_transfers_db"
+    user: "test_dbp_transfers_user"
+    pass: "almaty$2050"
+    ssl_mode: "disable"
+    time_zone: "Asia/Almaty"
+    max_conns: 100
+    max_conns_lifetime_minute: 20
+    max_conns_lifetime_jitter_minute: 5
+    max_conns_idle_time_minute: 10

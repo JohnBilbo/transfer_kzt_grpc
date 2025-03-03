@@ -1,6 +1,7 @@
 package grcp_app
 
 import (
+	"context"
 	"fmt"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
@@ -47,7 +48,7 @@ func (a *App) Run() error {
 		a.log.With("op", op).Error(err)
 		return c_errors.AttemptToRunErr
 	}
-	a.log.With("op", op, "port", a.port).Info("starting grpc server")
+	a.log.With("op", op).Info("starting grpc server")
 	if err = a.gRPCSvc.Serve(l); err != nil {
 		a.log.With("op", op).Error(err)
 		return c_errors.AttemptToRunErr
@@ -55,10 +56,17 @@ func (a *App) Run() error {
 	return nil
 }
 
-func (a *App) Stop(pool *pgxpool.Pool) {
+func (a *App) Stop(pool *pgxpool.Pool, log *zap.Logger, cancel context.CancelFunc) {
 	const op = "gRPC.Stop"
 	a.log.With("op", op, "port", a.port).Info("stop grpc server")
 	a.gRPCSvc.GracefulStop()
-	a.log.With("op", op, "port", a.port).Info("close postgres pool")
+
+	a.log.With("op", op).Info("cancel ctx")
+	cancel()
+
+	a.log.With("op", op).Info("close postgres pool")
 	pool.Close()
+
+	a.log.With("op", op).Info("close zap logger journal")
+	log.Sync()
 }
