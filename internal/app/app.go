@@ -1,18 +1,20 @@
 package app
 
 import (
+	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
-	"google.golang.org/grpc"
+	"transfer_kzt_grpc/internal/app/grcp_app"
+	"transfer_kzt_grpc/internal/config"
 )
 
-// App - структура приложения
 type App struct {
-	log        *zap.SugaredLogger
-	gRPCServer *grpc.Server
-	port       int
+	GRPCSvc *grcp_app.App
+	pgxPool *pgxpool.Pool
 }
 
-func New(log *zap.SugaredLogger) *App {
-	gRPCServer := grpc.NewServer()
-	return &App{}
+func NewApp(log *zap.SugaredLogger, cfg *config.Config) *App {
+	grpcApp := grcp_app.NewApp(log, cfg)
+	return &App{
+		GRPCSvc: grpcApp,
+	}
 }
