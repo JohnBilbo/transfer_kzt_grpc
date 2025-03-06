@@ -9,7 +9,7 @@ import (
 	"transfer_kzt_grpc/internal/app"
 	"transfer_kzt_grpc/internal/config"
 	"transfer_kzt_grpc/internal/lib/logger"
-	"transfer_kzt_grpc/internal/storage/postgre"
+	"transfer_kzt_grpc/storage/postgre"
 )
 
 func main() {
@@ -20,6 +20,7 @@ func main() {
 	log := logger.NewLogger(cfg)
 	defer log.Sync()
 
+	// db
 	pool, err := postgre.NewPool(ctx, cfg)
 	if err != nil {
 		log.Sugar().With("op", op).Error(err)
@@ -32,7 +33,7 @@ func main() {
 	application := app.NewApp(log.Sugar(), cfg)
 	go application.GRPCSvc.MustRun()
 	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, syscall.SIGTERM, syscall.SIGTERM)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM, syscall.SIGTERM)
 	stopInfo := <-stop
 	log.Sugar().With("op", op, "port", cfg.GRPCConfig.Port).Info(fmt.Sprintf("server stop info: %s", stopInfo.String()))
 	application.GRPCSvc.Stop(pool, log, cancel)
